@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css?family=UnifrakturMaguntia');
+
+
+body {
+  display: grid;
+  grid-template-columns: 2fr 8fr 2fr;
+  grid-template-rows: auto 1fr;
+  grid-gap: 10px;
+  grid-template-areas:
+    "header header header"
+    ". main .";
+  text-align: center;
+  background-image: url('../images/index-background.jpg');
+  margin-top: 15px;
+  color: #fff;
+}
+
+img {
+  border-radius: 5px 5px 0 0;
+  width: 100%;
+}
+
+header {
+  grid-area: header;
+  font-family: 'UnifrakturMaguntia', cursive;
+}
+
+main {
+  grid-area: main;
+}
+
+h1 {
+  font-size: 4vw;
+}
+
+h2 {
+  margin: 5px;
+  font-size: 2vw;
+}
+
+#all-roles {
+  background: #a0aec59c;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 18%));
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+  justify-content: center;
+  font-size: medium;
+  padding: 5px 0px;
+  color: #fff;
+}
+
+#all-roles .card:hover {
+  cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.enemies {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "undefeated-roles defeated-roles";
+  grid-gap: 10px;
+  padding-bottom: 5px;
+}
+
+.undefeated-roles {
+  grid-area: undefeated-roles;
+  display: grid;
+  grid-template-rows: 1fr 5fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: "undefeated-title""undefeated";
+}
+
+.defeated-roles {
+  grid-area: defeated-roles;
+  display: grid;
+  grid-template-rows: 1fr 5fr;
+  grid-template-columns: 1fr;
+  grid-template-areas: "defeated-title""defeated";
+}
+
+#undefeated-title {
+  grid-area: undefeated-title;
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 2vw;
+  background: #373a3896;
+  padding: 5px;
+  margin-bottom: 5px;
+
+}
+
+#undefeated {
+  grid-area: undefeated;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20px, 22%));
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+  justify-content: left;
+  font-size: small;
+  background: #a0aec59c;
+}
+
+#defeated-title {
+  grid-area: defeated-title;
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: 2vw;
+  background: #373a3896;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+#defeated {
+  grid-area: defeated;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20px, 22%));
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+  justify-content: right;
+  font-size: small;
+  background: #a0aec59c;
+}
+
+#game-message {
+  color: white;
+  background: #373a3896;
+  padding: 5px;
+  font-size: 1.5vw;
+}
+
+button {
+  background: #000000ba;
+  font-size: xx-large;
+  color: #f1e9e9;
+  border: solid #000000 2px;
+
+}
+
+#battle-ground {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "player stats opponent";
+  grid-gap: 10px;
+  margin-bottom: 10px;
+}
+
+#player {
+  grid-area: player;
+  float: left;
+  position: relative;
+  background: #4c628ead;
+  padding: 5px 0px;
+}
+
+#stats-div {
+grid-area: stats;
+align-self: center;
+padding: 10px;
+background: #373a3896;
+border: solid black 2px;
+}
+
+#opponent {
+  grid-area: opponent;
+  justify-self: right;
+  position: relative;
+  background: #a53f3f91;
+  padding: 5px 0px;
+}
+
+
+h3 {
+  height: 20%;
+}
+
+@media (max-width: 960px) {
+  body {
+    grid-template-columns: 2fr 8fr 2fr;
+    grid-template-rows: auto 1fr;
+    grid-gap: 10px;
+    grid-template-areas:
+      "header header header"
+      "main main main";
+  }
+}

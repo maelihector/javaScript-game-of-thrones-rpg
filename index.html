@@ -1,12 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>JavaScript Game of Thrones RPG</title>
+
+  <!-- Style sheets with Meyerweb's reset first to adjust for user browser. -->
+  <link rel="stylesheet" href="./assets/css/reset.css">
+  <link rel="stylesheet" href="./assets/css/index.css">
+
 </head>
+
 <body>
-  
+
+  <header>
+    <h1>Game of Thrones RPG</h1>
+    <h2>With JavaScript</h2>
+  </header>
+
+  <main>
+    <!-- All available roles that player can choose from will be laid out in all-roles div. -->
+    <div id="all-roles"></div>
+
+    <!-- Once the player chooses a role the remaining four roles will be moved to enemies div. -->
+    <div class='enemies'>
+
+      <!-- Roles will initially start in undefeated-roles div. -->
+      <div class='undefeated-roles'>
+        <!-- Title shows up via javaScript after player chooses a role. -->
+        <div id="undefeated-title"></div>
+        <div id="undefeated"></div>
+      </div>
+      <!-- If defeated the roles will be moved to defeated-roles div. -->
+      <div class='defeated-roles'>
+        <div id="defeated-title"></div>
+        <div id="defeated"></div>
+      </div>
+    </div>
+
+    <!-- game-message will be used to inform/instruct player througout the game. -->
+    <h2 id="game-message"></h2>
+    <!-- The attack-button will be shown/hidden throughout game. -->
+    <div id="attack-button"></div>
+
+    <!-- battle-ground div will show player and change to reflect current opponent. -->
+    <div id="battle-ground">
+      <div id="player"></div>
+      <!-- stats-div changes througout game to report score changes to player. -->
+      <div id="stats-div"></div>
+      <div id="opponent"></div>
+    </div>
+
+
+  </main>
+  <!-- JavaScript -->
+  <script type="text/javascript" src="./assets/javaScript/index.js"></script>
 </body>
+
 </html>
