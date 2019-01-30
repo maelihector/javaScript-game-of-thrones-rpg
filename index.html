@@ -28,14 +28,13 @@
         The goal of the game is to defeat all rival houses and sit alone on the Iron Throne!
       </p><br>
       <p>
-        No matter who you choose as your player, each House is capable of defeating all four remaining Houses, but only
+        No matter who you choose as your player, each House is capable of defeating all remaining Houses, but only
         if you choose your battles in the correct order.
-      </p><br>  
+      </p><br>
       <p>
         Also, don’t let health points fool you because attack and defense power
         (both hidden) vary and they are equally important.
-      </p><br>  
-      <h2>Choose Your Player!</h2><br>
+      </p><br>
     </div>
     <!-- All available roles that player can choose from will be laid out in all-roles div. -->
     <div id="all-roles"></div>
@@ -58,15 +57,25 @@
 
     <!-- game-message will be used to inform/instruct player througout the game. -->
     <h2 id="game-message"></h2>
+
+    <!-- history-div will show role history while user is chosing a player role. -->
+    <div id='history-div'></div>
+
     <!-- The attack-button will be shown/hidden throughout game. -->
     <div id="attack-button"></div>
 
     <!-- battle-ground div will show player and change to reflect current opponent. -->
     <div id="battle-ground">
-      <div id="player"></div>
+      <div class='player-section'>
+        <div class="player-title">player</div>
+        <div id="player"></div>
+      </div>
       <!-- stats-div changes througout game to report score changes to player. -->
       <div id="stats-div"></div>
-      <div id="opponent"></div>
+      <div class='opponent-section'>
+        <div class="opponent-title">opponent</div>
+        <div id="opponent"></div>
+      </div>
     </div>
 
 

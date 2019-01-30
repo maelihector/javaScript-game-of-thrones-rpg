@@ -133,7 +133,7 @@ div[id$='defeated']{
   align-items: center;
 }
 
-#game-message {
+#game-message, #history-div {
   color: white;
   background: #0000009c;
   padding: 5px;
@@ -152,10 +152,27 @@ button {
   display: none;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas:
-    "player stats opponent";
+    "player-section stats opponent-section";
   grid-gap: 10px;
   margin-bottom: 10px;
-  /* change to display: block when ready */
+}
+
+.player-section {
+  grid-area: player-section;
+  grid-template-areas: "player-title""player"
+}
+
+.opponent-section {
+  grid-area: opponent-section;
+  grid-template-areas: "opponent-title""opponent"
+}
+
+.player-title{
+  grid-area: player-title;
+}
+
+.opponent-title{
+  grid-area: opponent-title;
 }
 
 #player {
