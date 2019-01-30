@@ -183,8 +183,9 @@ button {
   padding: 5px 0px;
 }
 
-#stats-div {
+.stats-div {
   grid-area: stats;
+  grid-template-areas: "attackBtn""game-stats";
   align-self: center;
   padding: 10px;
   background: #373a3896;
@@ -199,6 +200,13 @@ button {
   padding: 5px 0px;
 }
 
+#attack-butotn{
+  grid-area: attackBtn;
+}
+
+#game-stats {
+  grid-area: game-stats;
+}
 
 h3 {
   height: 20%;

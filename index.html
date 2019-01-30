@@ -61,9 +61,6 @@
     <!-- history-div will show role history while user is chosing a player role. -->
     <div id='history-div'></div>
 
-    <!-- The attack-button will be shown/hidden throughout game. -->
-    <div id="attack-button"></div>
-
     <!-- battle-ground div will show player and change to reflect current opponent. -->
     <div id="battle-ground">
       <div class='player-section'>
@@ -71,13 +68,18 @@
         <div id="player"></div>
       </div>
       <!-- stats-div changes througout game to report score changes to player. -->
-      <div id="stats-div"></div>
+      <div class="stats-div">
+
+        <!-- The attack-button will be shown/hidden throughout game. -->
+        <div id="attack-button"></div>
+        <div id='game-stats'></div>
+
+      </div>
       <div class='opponent-section'>
         <div class="opponent-title">opponent</div>
         <div id="opponent"></div>
       </div>
     </div>
-
 
   </main>
   <!-- JavaScript -->

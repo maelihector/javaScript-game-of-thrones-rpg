@@ -90,6 +90,20 @@ let opponent;
 let undefeatedCardsDiv = document.getElementById('undefeated');
 // grab reference to area where opponent is rendered
 let opponentDiv = document.getElementById('opponent');
+// grab reference to attack-button div.
+let attackBtnDiv = document.getElementById('attack-button');
+// grab reference to game-stats div.
+let gameStatsDiv = document.getElementById('game-stats');
+// declare player's starting attackPower variable for game stats
+let playerInitialAP;
+// declare player's starting healthPoints variable for game stats
+let playerInitialHPs;
+// declare last num attacks for game stats
+let lastNumAttacks;
+// declare opponents starting healthPoints varible for game stats
+let opponentInitialHPs;
+// numAttacks variable helps keep track of player attack power
+let numAttacks = 1;
 
 // function to hide game objective when user clicks the X on it
 function hideObjective() {
@@ -205,6 +219,7 @@ function pickRole(value) {
     }
   }
   gameMessage();
+  gameStats();
 }
 
 // function to choose an opponent throughout game
@@ -216,6 +231,12 @@ function pickOpponent(value) {
     opponentDiv.innerHTML = "";
     // give opponent value of value.id
     opponent = value.id;
+    // save opponent's initial healthpoints.
+    opponentInitialHPs = roles[opponent]._healthPoints;
+    // save starting battle info for game stats
+    playerInitialHPs = roles[player]._healthPoints;
+    playerInitialAP = roles[player]._attackPower;
+    lastNumAttacks = numAttacks;
     // find index of opponent in enemies array
     let opponentIndex = enemies.indexOf(opponent);
     // remove opponent from enemies array
@@ -230,6 +251,99 @@ function pickOpponent(value) {
     }
   }
   gameMessage();
+  createAttackButton();
+  gameStats(playerInitialHPs, playerInitialAP, opponentInitialHPs, roles[opponent].counterAttackPower);
+}
+
+// function to create attack button
+function createAttackButton() {
+  // give attack button onclick event
+  setAttributes(attackBtnDiv, {
+    'onclick': 'changeScore()'
+  });
+  // create button element
+  let attackBtn = document.createElement('button');
+  attackBtn.innerText = 'Attack';
+  // append button element to attackBtn div
+  attackBtnDiv.append(attackBtn);
+}
+
+// changeScore() function will update player's score after every attack
+function changeScore() {
+  // grab current player and opponent stats
+  let playerHealthPoints = roles[player]._healthPoints;
+  let opponentHealthPoints = roles[opponent]._healthPoints;
+  let playerAttackPower = roles[player]._attackPower;
+  let opponentCounterAttackPower = roles[opponent].counterAttackPower;
+  // increase player's attackPower by numAttacks
+  playerAttackPower *= numAttacks;
+  // decrease opponent's healthPoints by player's attackPower
+  opponentHealthPoints -= playerAttackPower;
+  // call opponent object healthPoints setter and give argument of new opponentHealthPoints
+  roles[opponent].healthPoints = opponentHealthPoints;
+  // call showHealthPointsChange for opponent
+  showHealthPointsChange(opponent, opponentHealthPoints);
+
+  // if Baratheon defending against Stark, increase Baratheon counterAttackPower (We know the stag killed the direwolf)
+  if (player === roles["House Stark"].name && opponent === roles["House Baratheon"].name) {
+    opponentCounterAttackPower = 10;
+  }
+  // if Targaryen defending against Baratheon, lower Targaryen counterAttackPower (Baratheons did take down the Targaryens)
+  if (player === roles["House Baratheon"].name && opponent === roles["House Targaryen"].name) {
+    opponentCounterAttackPower = 4;
+  }
+
+  // decrease player's healthPoints by opponent's counterAttackPower
+  playerHealthPoints -= opponentCounterAttackPower;
+  // call player object healthPoints setter and give argument of new playerHealthPoints
+  roles[player].healthPoints = playerHealthPoints;
+  // increase numAttacks to keep track of player's attack power
+  numAttacks++;
+  // call showHealthPointsChange for player
+  showHealthPointsChange(player, playerHealthPoints);
+  // show player stats change
+  gameStats(playerHealthPoints, playerAttackPower, opponentHealthPoints, opponentCounterAttackPower);
+}
+
+// Change Health Points on player and opponent cards
+function showHealthPointsChange(role, roleHealthPoints) {
+  // only run if there is an opponent, else bugs
+  if (opponent) {
+    let cardToChange = document.getElementById(role);
+    // last child of role card is where health points are located (see renderRoleCards())
+    let h4ToChange = cardToChange.lastChild;
+    // update role's health points
+    h4ToChange.innerText = 'Health Points: ' + roleHealthPoints;
+  }
+}
+
+// function to show player stats changes
+function gameStats(playerHPs, playerAP, opponentHPs, opponentCAP) {
+  // first empty gameStatsDiv
+  gameStatsDiv.innerHTML = '';
+  // create p element
+  let p = document.createElement('p');
+  // if player has yet to choose an opponent
+  if (numAttacks === 1) {
+    p.innerText = 'Stats: None yet';
+
+  } else if (!opponent && enemies.length < 4) {
+    p.innerText = `End of Battle Stats:
+    Total Number of Attacks in Battle: ${numAttacks - lastNumAttacks}
+    Your attack power was raised by: ${playerInitialAP-playerAP} 
+    ${opponent} reduced your health points by: (${playerInitialHPs-playerHPs})
+    `;
+  } else {
+    // create generic message
+    p.innerText = `Last Attack Power: ${playerAP}
+    New Attack Power: ${playerInitialAP * (numAttacks +1)}
+    Opponent's Attack Power: ${opponentCAP}
+    Opponent Health Points: ${opponentHPs}
+    Your Health Points: ${playerHPs}
+    `;
+  }
+  // append message to gameStatsDiv
+  gameStatsDiv.appendChild(p);
 }
 
 // Function to decide which game message should be displayed throughout the game
