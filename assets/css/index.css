@@ -72,56 +72,45 @@ h2 {
   cursor: pointer;
 }
 
-.enemies {
-  display: grid;
+#enemies {
+  display: none;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "undefeated-roles defeated-roles";
   grid-gap: 10px;
   padding-bottom: 5px;
-  /* change to display: block when ready */
-  display: none;
 }
 
 .undefeated-roles {
   grid-area: undefeated-roles;
-  display: grid;
-  grid-template-rows: 1fr 5fr;
-  grid-template-columns: 1fr;
   grid-template-areas: "undefeated-title""undefeated";
 }
 
 .defeated-roles {
   grid-area: defeated-roles;
+  grid-template-areas: "defeated-title""defeated";
+}
+
+div[class$='roles']{
   display: grid;
   grid-template-rows: 1fr 5fr;
   grid-template-columns: 1fr;
-  grid-template-areas: "defeated-title""defeated";
 }
 
 #undefeated-title {
   grid-area: undefeated-title;
-  font-family: 'UnifrakturMaguntia', cursive;
-  font-size: 2vw;
-  background: #373a3896;
-  padding: 5px;
-  margin-bottom: 5px;
-
 }
 
 #undefeated {
   grid-area: undefeated;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20px, 22%));
-  grid-template-rows: 1fr;
-  grid-gap: 10px;
   justify-content: left;
-  font-size: small;
-  background: #a0aec59c;
 }
 
 #defeated-title {
   grid-area: defeated-title;
+}
+
+div[class$='title'] {
   font-family: 'UnifrakturMaguntia', cursive;
   font-size: 2vw;
   background: #373a3896;
@@ -131,13 +120,17 @@ h2 {
 
 #defeated {
   grid-area: defeated;
+  justify-content: right;
+}
+
+div[id$='defeated']{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20px, 22%));
   grid-template-rows: 1fr;
   grid-gap: 10px;
-  justify-content: right;
   font-size: small;
-  background: #a0aec59c;
+  background: #0000009c;
+  align-items: center;
 }
 
 #game-message {
@@ -156,14 +149,13 @@ button {
 }
 
 #battle-ground {
-  display: grid;
+  display: none;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas:
     "player stats opponent";
   grid-gap: 10px;
   margin-bottom: 10px;
   /* change to display: block when ready */
-  display: none;
 }
 
 #player {
