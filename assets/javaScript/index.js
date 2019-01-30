@@ -1,5 +1,13 @@
-// Game of Thrones RPG with JavaScript Pseudocode
 
+// function to hide game objective when user clicks the X on it
+function hideObjective() {
+  // grab game-objective div from the DOM
+  let objective = document.getElementById('game-objective');
+  objective.setAttribute('style', 'display:none');
+}
+
+
+// Game of Thrones RPG with JavaScript Pseudocode
 
 // CHOOSING A ROLE
 
