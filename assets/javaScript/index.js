@@ -73,6 +73,17 @@ const roles = {
 };
 
 
+// ** Global Variable **
+// grab reference to the area where we want role history to be rendered and save to gameMessageDiv variable  
+let gameMessageDiv = document.getElementById('game-message');
+// grab reference to div with id='all-roles' to remove after user chooses their player.
+let allRolesdDiv = document.getElementById('all-roles');
+// declare player var to be used in pickRole()
+let player;
+// save all roles besides player as initial list of enemies
+let enemies = [];
+
+
 // function to hide game objective when user clicks the X on it
 function hideObjective() {
   // grab game-objective div from the DOM
@@ -92,11 +103,23 @@ function renderRoleCards(role, area) {
     'id': role.name,
   });
   // only if area is 'all-roles', add attribute mouseover so player can see role history before choosing a player role.
+  // add attribute onclick event so user can choose their player.
   if (area === 'all-roles') {
     setAttributes(cardDiv, {
       // add 'this' as an argument of showHistory() to grab reference to the target of the mousedover event
-      'onmouseover': 'showHistory(this)'
+      'onmouseover': 'showHistory(this)',
+      // add 'this' as an argument of pickRoles() to grab reference to the target of the click event
+      'onclick': 'pickRole(this)'
     });
+  }
+  if(area === 'undefeated'){
+    // grab reference to enemies and battleground div
+    let enemiesDiv = document.getElementById('enemies');
+    let battlegroundDiv = document.getElementById('battle-ground');
+    // change attribute style display from none to grid
+    enemiesDiv.setAttribute('style', 'display:grid');
+    battlegroundDiv.setAttribute('style', 'display:grid');
+
   }
   // create an h3 element and save to h3 variable
   let h3 = document.createElement('h3');
@@ -130,8 +153,6 @@ function startGame() {
 // Call startGame() to initiate game.
 startGame();
 
-// grab reference to the area where we want role history to be rendered and save to gameMessageDiv variable  
-let gameMessageDiv = document.getElementById('game-message');
 // showHistory() function shows player role history. 
 function showHistory(value) {
   // empty gameMessageDiv to avoid more than one role history showing at once
@@ -146,6 +167,29 @@ function showHistory(value) {
       gameMessageDiv.appendChild(historyParagraph);
       // append role history to historyParagraph
       historyParagraph.append(roles[key].history);
+    }
+  }
+}
+
+// function to pick player role
+function pickRole(value) {
+  // assign clicked value.id as player value
+  player = value.id;
+  // remove all-roles div as list of enemies will appear elsewhere
+  allRolesdDiv.remove();
+  // empty informationDiv as role history will only be show while choosing a player
+  gameMessageDiv.innerHTML = "";
+  // loop through all roles
+  for (let key in roles) {
+    // if  a role name matches the value.id (assigned during renderRoleCards())
+    if (roles[key].name === value.id) {
+      // render the cards in player div
+      renderRoleCards(roles[key], 'player');
+    } else {
+      // else push to enemies array
+      enemies.push(roles[key].name);
+      // and render the cards to undefeated section so player can choose opponent
+      renderRoleCards(roles[key], 'undefeated');
     }
   }
 }
