@@ -100,6 +100,8 @@ let playerInitialAP;
 let playerInitialHPs;
 // declare last num attacks for game stats
 let lastNumAttacks;
+// declare last opponent for game stats
+let lastOpponent;
 // declare opponents starting healthPoints varible for game stats
 let opponentInitialHPs;
 // numAttacks variable helps keep track of player attack power
@@ -140,11 +142,14 @@ function renderRoleCards(role, area) {
     // change attribute style display from none to grid
     enemiesDiv.setAttribute('style', 'display:grid');
     battlegroundDiv.setAttribute('style', 'display:grid');
-    setAttributes(cardDiv, {
-      // add 'this' as an argument of pickRoles() to grab reference to the target of the click event
-      'onclick': 'pickOpponent(this)',
-      'class': 'pointer'
-    });
+    if (!opponent && roles[player]._healthPoints > 0) {
+      // add attributes only if there is no opponent and if player is still undefeated to avoid bugs
+      setAttributes(cardDiv, {
+        // add 'this' as an argument of pickRoles() to grab reference to the target of the click event
+        'onclick': 'pickOpponent(this)',
+        'class': 'pointer'
+      });
+    }
   }
   // create an h3 element and save to h3 variable
   let h3 = document.createElement('h3');
@@ -201,6 +206,8 @@ function showHistory(value) {
 function pickRole(value) {
   // assign clicked value.id as player value
   player = value.id;
+  playerInitialAP = roles[player]._attackPower;
+  playerInitialHPs = roles[player]._healthPoints;
   // remove all-roles div as list of enemies will appear elsewhere
   allRolesdDiv.remove();
   // empty historyDiv as role history will only be show while choosing a player
@@ -234,8 +241,7 @@ function pickOpponent(value) {
     // save opponent's initial healthpoints.
     opponentInitialHPs = roles[opponent]._healthPoints;
     // save starting battle info for game stats
-    playerInitialHPs = roles[player]._healthPoints;
-    playerInitialAP = roles[player]._attackPower;
+    lastOpponent = opponent;
     lastNumAttacks = numAttacks;
     // find index of opponent in enemies array
     let opponentIndex = enemies.indexOf(opponent);
@@ -323,16 +329,14 @@ function gameStats(playerHPs, playerAP, opponentHPs, opponentCAP) {
   gameStatsDiv.innerHTML = '';
   // create p element
   let p = document.createElement('p');
-  // if player has yet to choose an opponent
-  if (numAttacks === 1) {
+  // if player is defeated
+  if (playerHPs <= 0) {
+    gameMessage();
+    // if player hasn't attacked yet
+  } else if (numAttacks === 1 || opponentInitialHPs === opponentHPs) {
     p.innerText = 'Stats: None yet';
-
-  } else if (!opponent && enemies.length < 4) {
-    p.innerText = `End of Battle Stats:
-    Total Number of Attacks in Battle: ${numAttacks - lastNumAttacks}
-    Your attack power was raised by: ${playerInitialAP-playerAP} 
-    ${opponent} reduced your health points by: (${playerInitialHPs-playerHPs})
-    `;
+  } else if (opponentHPs <= 0) {
+    opponentExtinction(playerAP, playerHPs);
   } else {
     // create generic message
     p.innerText = `Last Attack Power: ${playerAP}
@@ -344,6 +348,44 @@ function gameStats(playerHPs, playerAP, opponentHPs, opponentCAP) {
   }
   // append message to gameStatsDiv
   gameStatsDiv.appendChild(p);
+}
+
+// called when a role has > 0 healthPoints
+function opponentExtinction(playerAP, playerHPs) {
+  // first empty gameStatsDiv
+  gameStatsDiv.innerHTML = '';
+  // create p element
+  let p = document.createElement('p');
+  // show battle end stats
+  p.innerText = `End of Battle Stats:
+
+  Total Number of Attacks in Battle: 
+  ${numAttacks - lastNumAttacks}
+
+  Raised Attack Power Points by: 
+  ${Math.abs(playerInitialAP - playerAP)}
+
+  ${lastOpponent} reduced your health points by: 
+  ${playerInitialHPs-playerHPs}
+  `;
+  // append message to gameStatsDiv
+  gameStatsDiv.appendChild(p);
+
+  // remove attack button to prevent bugs
+  attackBtnDiv.innerHTML = '';
+  // push defeated role card to defeated area with all other defeated enemies
+  renderRoleCards(roles[opponent], 'defeated');
+  // empty opponent div
+  opponentDiv.innerHTML = "";
+  // then empty opponent variable
+  opponent = '';
+  // empty undefeated cards div,
+  undefeatedCardsDiv.innerHTML = "";
+  // and re-render undefeated cards with pickOpponent onClick
+  for (let i = 0; i < enemies.length; i++) {
+    renderRoleCards(roles[enemies[i]], 'undefeated');
+  }
+  gameMessage();
 }
 
 // Function to decide which game message should be displayed throughout the game
