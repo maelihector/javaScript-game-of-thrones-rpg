@@ -74,15 +74,22 @@ const roles = {
 
 
 // ** Global Variable **
-// grab reference to the area where we want role history to be rendered and save to gameMessageDiv variable  
-let gameMessageDiv = document.getElementById('game-message');
 // grab reference to div with id='all-roles' to remove after user chooses their player.
 let allRolesdDiv = document.getElementById('all-roles');
+// grab reference to area where we want role history to be rendered and save to historyDiv variable
+let historyDiv = document.getElementById('history-div');
+// grab reference to the area where we want game messages to be rendered and save to gameMessageDiv variable  
+let gameMessageDiv = document.getElementById('game-message');
 // declare player var to be used in pickRole()
 let player;
 // save all roles besides player as initial list of enemies
 let enemies = [];
-
+// declare opponent var to be used in pickOpponent()
+let opponent;
+// grab reference to area where enemies are rendered
+let undefeatedCardsDiv = document.getElementById('undefeated');
+// grab reference to area where opponent is rendered
+let opponentDiv = document.getElementById('opponent');
 
 // function to hide game objective when user clicks the X on it
 function hideObjective() {
@@ -112,14 +119,18 @@ function renderRoleCards(role, area) {
       'onclick': 'pickRole(this)'
     });
   }
-  if(area === 'undefeated'){
+  if (area === 'undefeated') {
     // grab reference to enemies and battleground div
     let enemiesDiv = document.getElementById('enemies');
     let battlegroundDiv = document.getElementById('battle-ground');
     // change attribute style display from none to grid
     enemiesDiv.setAttribute('style', 'display:grid');
     battlegroundDiv.setAttribute('style', 'display:grid');
-
+    setAttributes(cardDiv, {
+      // add 'this' as an argument of pickRoles() to grab reference to the target of the click event
+      'onclick': 'pickOpponent(this)',
+      'class': 'pointer'
+    });
   }
   // create an h3 element and save to h3 variable
   let h3 = document.createElement('h3');
@@ -149,22 +160,23 @@ function startGame() {
   for (let key in roles) {
     renderRoleCards(roles[key], 'all-roles');
   }
+  gameMessage();
 }
 // Call startGame() to initiate game.
 startGame();
 
 // showHistory() function shows player role history. 
 function showHistory(value) {
-  // empty gameMessageDiv to avoid more than one role history showing at once
-  gameMessageDiv.innerHTML = "";
+  // empty historyDiv to avoid more than one role history showing at once
+  historyDiv.innerHTML = "";
   // loop through all keys in roles object
   for (let key in roles) {
     // if the value of the id is equal to role name,
     if (value.id === roles[key].name) {
       // create a p element and save it to historyParagraph variable,
       let historyParagraph = document.createElement('p');
-      // append historyParagraph as child node of gameMessageDiv
-      gameMessageDiv.appendChild(historyParagraph);
+      // append historyParagraph as child node of historyDiv
+      historyDiv.appendChild(historyParagraph);
       // append role history to historyParagraph
       historyParagraph.append(roles[key].history);
     }
@@ -177,8 +189,8 @@ function pickRole(value) {
   player = value.id;
   // remove all-roles div as list of enemies will appear elsewhere
   allRolesdDiv.remove();
-  // empty informationDiv as role history will only be show while choosing a player
-  gameMessageDiv.innerHTML = "";
+  // empty historyDiv as role history will only be show while choosing a player
+  historyDiv.innerHTML = "";
   // loop through all roles
   for (let key in roles) {
     // if  a role name matches the value.id (assigned during renderRoleCards())
@@ -191,6 +203,56 @@ function pickRole(value) {
       // and render the cards to undefeated section so player can choose opponent
       renderRoleCards(roles[key], 'undefeated');
     }
+  }
+  gameMessage();
+}
+
+// function to choose an opponent throughout game
+function pickOpponent(value) {
+  // because well have transitions between having an opponent make sure to only reasign value to var opponent if its empty.
+  // if event goes off when global opponent is falsey
+  if (!opponent) {
+    // empty opponent div incase this function has been called before
+    opponentDiv.innerHTML = "";
+    // give opponent value of value.id
+    opponent = value.id;
+    // find index of opponent in enemies array
+    let opponentIndex = enemies.indexOf(opponent);
+    // remove opponent from enemies array
+    enemies.splice(opponentIndex, 1);
+    // empty undefeated cards to re-render updated enemies array
+    undefeatedCardsDiv.innerHTML = "";
+    // render the chosen opponent card
+    renderRoleCards(roles[opponent], 'opponent');
+    // re-render undefeated enemies cards
+    for (let i = 0; i < enemies.length; i++) {
+      renderRoleCards(roles[enemies[i]], 'undefeated');
+    }
+  }
+  gameMessage();
+}
+
+// Function to decide which game message should be displayed throughout the game
+function gameMessage() {
+  // empty gameMessageDiv
+  gameMessageDiv.innerText = "";
+  // if player is not chosen yet,
+  if (!player) {
+    // message is following:
+    let pickPlayerMessage = 'Choose Your Player';
+    gameMessageDiv.append(pickPlayerMessage);
+    // if player has yet to choose an opponent & there are still enemies left
+  } else if (!opponent && enemies.length > 0) {
+    // message is following:
+    let pickOpponentMesage = 'Choose Your Opponent';
+    gameMessageDiv.append(pickOpponentMesage);
+    // else if there is an opponent & player has not been defeated
+  } else if (opponent && roles[player]._healthPoints > 0) {
+    // message is following:
+    gameMessageDiv.append('Attack Your Opponent!');
+  } else {
+    // else message is following:
+    gameMessageDiv.append('Game Over');
   }
 }
 
