@@ -91,6 +91,13 @@ function renderRoleCards(role, area) {
     // give id the value of role name
     'id': role.name,
   });
+  // only if area is 'all-roles', add attribute mouseover so player can see role history before choosing a player role.
+  if (area === 'all-roles') {
+    setAttributes(cardDiv, {
+      // add 'this' as an argument of showHistory() to grab reference to the target of the mousedover event
+      'onmouseover': 'showHistory(this)'
+    });
+  }
   // create an h3 element and save to h3 variable
   let h3 = document.createElement('h3');
   // insert role name inside h3 via .innerText
@@ -123,6 +130,25 @@ function startGame() {
 // Call startGame() to initiate game.
 startGame();
 
+// grab reference to the area where we want role history to be rendered and save to gameMessageDiv variable  
+let gameMessageDiv = document.getElementById('game-message');
+// showHistory() function shows player role history. 
+function showHistory(value) {
+  // empty gameMessageDiv to avoid more than one role history showing at once
+  gameMessageDiv.innerHTML = "";
+  // loop through all keys in roles object
+  for (let key in roles) {
+    // if the value of the id is equal to role name,
+    if (value.id === roles[key].name) {
+      // create a p element and save it to historyParagraph variable,
+      let historyParagraph = document.createElement('p');
+      // append historyParagraph as child node of gameMessageDiv
+      gameMessageDiv.appendChild(historyParagraph);
+      // append role history to historyParagraph
+      historyParagraph.append(roles[key].history);
+    }
+  }
+}
 
 // Function to add several attributes to an element rather than adding one attribute at a time (see hideObjective()).
 function setAttributes(el, attrs) {
