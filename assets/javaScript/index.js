@@ -340,7 +340,7 @@ function gameStats(playerHPs, playerAP, opponentHPs, opponentCAP) {
   let p = document.createElement('p');
   // if player is defeated
   if (playerHPs <= 0) {
-    gameMessage();
+    gameMessage(playerHPs, playerAP, opponentHPs, opponentCAP);
     // if player hasn't attacked yet
   } else if (numAttacks === 1 || opponentInitialHPs === opponentHPs) {
     p.innerText = 'Stats: None yet';
@@ -372,9 +372,9 @@ function opponentExtinction(playerHPs, opponentCAP) {
   ${numAttacks - lastNumAttacks}
 
   Raised Attack Power Points By: 
-  ${playerInitialAP * (numAttacks - lastNumAttacks)}
+  ${playerInitialAP * ((numAttacks - lastNumAttacks) + 1)}
 
-  ${lastOpponent} reduced your health points By: 
+  ${lastOpponent} Reduced Your Health Points By: 
   ${opponentCAP * (numAttacks - lastNumAttacks)}
   `;
   // append message to gameStatsDiv
@@ -399,7 +399,7 @@ function opponentExtinction(playerHPs, opponentCAP) {
 }
 
 // Function to decide which game message should be displayed throughout the game
-function gameMessage() {
+function gameMessage(playerHPs, playerAP, opponentHPs, opponentCAP) {
   // empty gameMessageDiv
   gameMessageDiv.innerText = "";
   // if player is not chosen yet,
@@ -419,8 +419,58 @@ function gameMessage() {
   } else {
     // else message is following:
     gameMessageDiv.append('Game Over');
+    gameOverMessage(playerHPs, playerAP, opponentHPs, opponentCAP);
   }
 }
+
+// function that delivers end of game message
+function gameOverMessage(playerHPs, playerAP, opponentHPs, opponentCAP) {
+  // remove attack button to prevent bugs
+  attackBtnDiv.innerHTML = '';
+  // create p element
+  let p1 = document.createElement('p');
+  // if player health points are > 0
+  if ( playerHPs > 0) {
+    p1.innerText = `Congratulations!
+    
+    You defeated all of your opponents and are now sitting on the Iron Throne!
+    
+    You attacked a total of ${numAttacks} times
+    
+    Ended with an Attack Power of ${playerAP}
+    
+    Lost a total of ${-playerHPs + playerStartingHPs} Health Points
+
+    `;
+  }
+  // if opponent health points > 0
+  if (opponentHPs > 0) {
+    p1.innerText = `${lastOpponent} defeated you! 
+
+    You attacked a total of ${numAttacks} times
+    &
+    Ended with an Attack Power of ${playerAP}
+
+    Refresh the page to try again, but pick the order of your opponents differently next time. Good Luck!
+    
+    `;
+  }
+  // if both player and opponent have < 0 health points
+  if (playerHPs <= 0 && opponentHPs <= 0) {
+    
+    p1.innerText = `${lastOpponent} decided that they weren't going quitely into the night but rather take you down with them.
+
+    You attacked a total of ${numAttacks} times
+    &
+    Ended with an Attack Power of ${playerAP}
+
+    Refresh the page to try again, but next time get more experience (total number of attacks) before taking on ${lastOpponent}. Good Luck!
+
+    `;
+  }
+  gameStatsDiv.appendChild(p1);
+}
+
 
 // Function to add several attributes to an element rather than adding one attribute at a time (see toggleObjective()).
 function setAttributes(el, attrs) {

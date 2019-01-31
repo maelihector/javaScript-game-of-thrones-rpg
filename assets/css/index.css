@@ -91,7 +91,7 @@ h2 {
   grid-template-areas: "defeated-title""defeated";
 }
 
-div[class$='roles']{
+div[class$='roles'] {
   display: grid;
   grid-template-rows: 1fr 5fr;
   grid-template-columns: 1fr;
@@ -123,7 +123,7 @@ div[class$='title'] {
   justify-content: right;
 }
 
-div[id$='defeated']{
+div[id$='defeated'] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20px, 22%));
   grid-template-rows: 1fr;
@@ -133,7 +133,8 @@ div[id$='defeated']{
   align-items: center;
 }
 
-#game-message, #history-div {
+#game-message,
+#history-div {
   color: white;
   background: #0000009c;
   padding: 5px;
@@ -145,7 +146,7 @@ button {
   font-size: xx-large;
   color: #f1e9e9;
   border: solid #000000 2px;
-
+  cursor: pointer;
 }
 
 #battle-ground {
@@ -167,11 +168,11 @@ button {
   grid-template-areas: "opponent-title""opponent"
 }
 
-.player-title{
+.player-title {
   grid-area: player-title;
 }
 
-.opponent-title{
+.opponent-title {
   grid-area: opponent-title;
 }
 
@@ -188,7 +189,7 @@ button {
   grid-template-areas: "attackBtn""game-stats";
   align-self: center;
   padding: 10px;
-  background: #373a3896;
+  background: #2c2f2dcc;
   border: solid black 2px;
 }
 
@@ -200,7 +201,7 @@ button {
   padding: 5px 0px;
 }
 
-#attack-butotn{
+#attack-butotn {
   grid-area: attackBtn;
 }
 
