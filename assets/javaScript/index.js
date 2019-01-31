@@ -116,10 +116,10 @@ function toggleObjective() {
   let currentDisplay = objective.getAttribute('style');
   if (currentDisplay === 'display:none') {
     objective.setAttribute('style', 'display:block');
-    text.innerText = 'Close';
+    text.innerText = 'Close Objective';
   } else {
     objective.setAttribute('style', 'display:none');
-    text.innerText = 'Open';
+    text.innerText = 'Open Objective';
   }
 }
 
@@ -220,7 +220,7 @@ function pickRole(value) {
   // remove all-roles div as list of enemies will appear elsewhere
   allRolesdDiv.remove();
   // empty historyDiv as role history will only be show while choosing a player
-  historyDiv.innerHTML = "";
+  historyDiv.remove();
   // loop through all roles
   for (let key in roles) {
     // if  a role name matches the value.id (assigned during renderRoleCards())
@@ -430,7 +430,7 @@ function gameOverMessage(playerHPs, playerAP, opponentHPs, opponentCAP) {
   // create p element
   let p1 = document.createElement('p');
   // if player health points are > 0
-  if ( playerHPs > 0) {
+  if (playerHPs > 0) {
     p1.innerText = `Congratulations!
     
     You defeated all of your opponents and are now sitting on the Iron Throne!
@@ -457,7 +457,7 @@ function gameOverMessage(playerHPs, playerAP, opponentHPs, opponentCAP) {
   }
   // if both player and opponent have < 0 health points
   if (playerHPs <= 0 && opponentHPs <= 0) {
-    
+
     p1.innerText = `${lastOpponent} decided that they weren't going quitely into the night but rather take you down with them.
 
     You attacked a total of ${numAttacks} times
@@ -479,7 +479,22 @@ function setAttributes(el, attrs) {
   }
 }
 
+// function for moreInfo display
+function displayMoreInfo() {
+  // grab more info span
+  let moreInfo = document.getElementById('moreInfo');
+  let text = document.getElementById('info');
+  text.innerText = '';
+  let currentDisplay = moreInfo.getAttribute('style');
+  if (currentDisplay === 'display:none') {
+    moreInfo.setAttribute('style', 'display:block');
+    text.innerText = 'Less Info';
+  } else {
+    moreInfo.setAttribute('style', 'display:none');
+    text.innerText = 'More Info';
+  }
 
+}
 // Game of Thrones RPG with JavaScript Pseudocode
 
 // CHOOSING A ROLE

@@ -4,11 +4,12 @@
 body {
   display: grid;
   grid-template-columns: 2fr 8fr 2fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
   grid-gap: 10px;
   grid-template-areas:
     "header header header"
-    ". main .";
+    ". main ."
+    "footer footer footer";
   text-align: center;
   background-image: url('../images/index-background.jpg');
   margin-top: 15px;
@@ -30,6 +31,7 @@ h1 {
 
 main {
   grid-area: main;
+  margin-bottom: 40px;
 }
 
 h1 {
@@ -211,6 +213,24 @@ button {
 
 h3 {
   height: 20%;
+}
+
+footer {
+  grid-area: footer;
+  background: #0000009c;
+  padding: 10px;
+}
+
+span {
+  margin-left: 20px;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: underline;
+  color: #fff;
 }
 
 @media (max-width: 960px) {
