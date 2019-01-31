@@ -41,13 +41,13 @@ h2 {
   font-size: 25px;
 }
 
-#game-objective {
+#toggle {
   background: #0000009c;
   padding: 5px;
   margin-bottom: 5px;
 }
 
-.x {
+#x {
   text-align: right;
   cursor: pointer;
 }

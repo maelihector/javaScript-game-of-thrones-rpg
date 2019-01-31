@@ -21,20 +21,22 @@
   </header>
 
   <main>
-    <div id="game-objective">
-      <p class="x" onclick="hideObjective()">Click here to hide</p>
-      <h2>Pick your path to conquer your enemies!</h2><br>
-      <p>
-        The goal of the game is to defeat all rival houses and sit alone on the Iron Throne!
-      </p><br>
-      <p>
-        No matter who you choose as your player, each House is capable of defeating all remaining Houses, but only
-        if you choose your battles in the correct order.
-      </p><br>
-      <p>
-        Also, don’t let health points fool you because attack and defense power
-        (both hidden) vary and they are equally important.
-      </p><br>
+    <div id='toggle'>
+      <p id="x" onclick="toggleObjective()">Close</p>
+      <div id="game-objective">
+        <h2>Pick your path to conquer your enemies!</h2><br>
+        <p>
+          The goal of the game is to defeat all rival houses and sit alone on the Iron Throne!
+        </p><br>
+        <p>
+          No matter who you choose as your player, each House is capable of defeating all remaining Houses, but only
+          if you choose your battles in the correct order.
+        </p><br>
+        <p>
+          Also, don’t let health points fool you because attack and defense power
+          (both hidden) vary and they are equally important.
+        </p><br>
+      </div>
     </div>
     <!-- All available roles that player can choose from will be laid out in all-roles div. -->
     <div id="all-roles"></div>

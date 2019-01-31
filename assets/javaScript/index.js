@@ -108,10 +108,19 @@ let opponentInitialHPs;
 let numAttacks = 1;
 
 // function to hide game objective when user clicks the X on it
-function hideObjective() {
+function toggleObjective() {
   // grab game-objective div from the DOM
   let objective = document.getElementById('game-objective');
-  objective.setAttribute('style', 'display:none');
+  let text = document.getElementById('x');
+  text.innerText = '';
+  let currentDisplay = objective.getAttribute('style');
+  if (currentDisplay === 'display:none') {
+    objective.setAttribute('style', 'display:block');
+    text.innerText = 'Close';
+  } else {
+    objective.setAttribute('style', 'display:none');
+    text.innerText = 'Open';
+  }
 }
 
 // Function to render role cards to the DOM.
@@ -336,11 +345,11 @@ function gameStats(playerHPs, playerAP, opponentHPs, opponentCAP) {
   } else if (numAttacks === 1 || opponentInitialHPs === opponentHPs) {
     p.innerText = 'Stats: None yet';
   } else if (opponentHPs <= 0) {
-    opponentExtinction(playerAP, playerHPs);
+    opponentExtinction(playerHPs, opponentCAP);
   } else {
     // create generic message
     p.innerText = `Last Attack Power: ${playerAP}
-    New Attack Power: ${playerInitialAP * (numAttacks +1)}
+    New Attack Power: ${playerInitialAP * (numAttacks)}
     Opponent's Attack Power: ${opponentCAP}
     Opponent Health Points: ${opponentHPs}
     Your Health Points: ${playerHPs}
@@ -351,7 +360,7 @@ function gameStats(playerHPs, playerAP, opponentHPs, opponentCAP) {
 }
 
 // called when a role has > 0 healthPoints
-function opponentExtinction(playerAP, playerHPs) {
+function opponentExtinction(playerHPs, opponentCAP) {
   // first empty gameStatsDiv
   gameStatsDiv.innerHTML = '';
   // create p element
@@ -362,15 +371,14 @@ function opponentExtinction(playerAP, playerHPs) {
   Total Number of Attacks in Battle: 
   ${numAttacks - lastNumAttacks}
 
-  Raised Attack Power Points by: 
-  ${Math.abs(playerInitialAP - playerAP)}
+  Raised Attack Power Points By: 
+  ${playerInitialAP * (numAttacks - lastNumAttacks)}
 
-  ${lastOpponent} reduced your health points by: 
-  ${playerInitialHPs-playerHPs}
+  ${lastOpponent} reduced your health points By: 
+  ${opponentCAP * (numAttacks - lastNumAttacks)}
   `;
   // append message to gameStatsDiv
   gameStatsDiv.appendChild(p);
-
   // remove attack button to prevent bugs
   attackBtnDiv.innerHTML = '';
   // push defeated role card to defeated area with all other defeated enemies
@@ -386,6 +394,8 @@ function opponentExtinction(playerAP, playerHPs) {
     renderRoleCards(roles[enemies[i]], 'undefeated');
   }
   gameMessage();
+  // change stats for next opponent extinction stats
+  playerInitialHPs = playerInitialHPs - playerHPs;
 }
 
 // Function to decide which game message should be displayed throughout the game
@@ -412,7 +422,7 @@ function gameMessage() {
   }
 }
 
-// Function to add several attributes to an element rather than adding one attribute at a time (see hideObjective()).
+// Function to add several attributes to an element rather than adding one attribute at a time (see toggleObjective()).
 function setAttributes(el, attrs) {
   for (let key in attrs) {
     el.setAttribute(key, attrs[key]);
