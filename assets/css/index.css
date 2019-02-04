@@ -236,10 +236,11 @@ a {
 @media (max-width: 960px) {
   body {
     grid-template-columns: 2fr 8fr 2fr;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-gap: 10px;
     grid-template-areas:
       "header header header"
-      "main main main";
+      "main main main"
+      "footer footer footer";
   }
 }
