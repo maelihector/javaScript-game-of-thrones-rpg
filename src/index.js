@@ -300,12 +300,17 @@ function gameStats() {
     gameOver('loser');
   } else {
     // create during battle stata message
-    p.innerText = `Last Attack Power: ${updatedPlayerAttackPower}
-    New Attack Power: ${updatedPlayerAttackPower + playerStartingAttackPower}
-    Opponent's Attack Power: ${currentOpponentCounterAttackPower}
-    Opponent Health Points: ${updatedOpponentHealthPoints}
-    Your Health Points: ${updatedPlayerHealthPoints}
+    p.innerText = `You attacked with 
+                  Attack Power of: ${updatedPlayerAttackPower}
+                  Opponent attacked you back with
+                  Attack Power of: ${currentOpponentCounterAttackPower}
     `;
+    // p.innerText = `Last Attack Power: ${updatedPlayerAttackPower}
+    // New Attack Power: ${updatedPlayerAttackPower + playerStartingAttackPower}
+    // Opponent's Attack Power: ${currentOpponentCounterAttackPower}
+    // Opponent Health Points: ${updatedOpponentHealthPoints}
+    // Your Health Points: ${updatedPlayerHealthPoints}
+    // `;
   }
   // append message to gameStatsDiv
   gameStatsDiv.appendChild(p);

@@ -23,6 +23,8 @@ img {
 
 header {
   grid-area: header;
+  background: #00000087;
+  padding: 10px;
 }
 
 h1 {
@@ -44,7 +46,7 @@ h2 {
 }
 
 #toggle {
-  background: #0000009c;
+  background: #000000bf;
   padding: 5px;
   margin-bottom: 5px;
 }
@@ -149,6 +151,7 @@ button {
   color: #f1e9e9;
   border: solid #000000 2px;
   cursor: pointer;
+  margin-bottom: 5px;
 }
 
 #battle-ground {
