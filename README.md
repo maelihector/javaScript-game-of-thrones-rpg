@@ -20,15 +20,15 @@ The game ends when either the player is defeated, when player and opponent defea
 
 ## Technologies Used
 HTML
-CSS
+Vanilla CSS
 JavaScript
+[jQuery](https://jquery.com/)
 
 
 ## Credits
 [Meyerweb](http://meyerweb.com/eric/tools/css/reset/) CSS reset 
 [Google Fonts](https://fonts.google.com/specimen/UnifrakturMaguntia)
 [Pixaby](https://fonts.google.com/specimen/UnifrakturMaguntia) images
-[Babel](https://babeljs.io/) JavaScript transpiler
 
 > Written with [StackEdit](https://stackedit.io/).
 
