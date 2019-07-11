@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=UnifrakturMaguntia');
-
-
 body {
   display: grid;
   grid-template-columns: 2fr 8fr 2fr;
@@ -13,7 +10,7 @@ body {
   text-align: center;
   background-image: url('../images/index-background.jpg');
   margin-top: 15px;
-  color: #e2e4e6;
+  color: #fdfeffe6;
 }
 
 img {
@@ -23,12 +20,13 @@ img {
 
 header {
   grid-area: header;
-  background: #00000087;
+  background: #330303b3;
   padding: 10px;
+  color: #ffffffcf;
 }
 
 h1 {
-  font-family: 'UnifrakturMaguntia', cursive;
+  font-family: 'Oswald', sans-serif;
 }
 
 main {
@@ -65,7 +63,7 @@ h2 {
   justify-content: center;
   font-size: medium;
   padding: 5px 0px;
-  color: #fff;
+  color: #fdfeffe6;
 }
 
 #all-roles .card:hover {
@@ -107,7 +105,7 @@ div[class$='roles'] {
 
 #undefeated {
   grid-area: undefeated;
-  justify-content: left;
+  justify-content: center;
 }
 
 #defeated-title {
@@ -115,16 +113,16 @@ div[class$='roles'] {
 }
 
 div[class$='title'] {
-  font-family: 'UnifrakturMaguntia', cursive;
-  font-size: 2vw;
-  background: #373a3896;
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  background: #00000094;
   padding: 5px;
   margin-bottom: 5px;
 }
 
 #defeated {
   grid-area: defeated;
-  justify-content: right;
+  justify-content: center;
 }
 
 div[id$='defeated'] {
@@ -137,12 +135,18 @@ div[id$='defeated'] {
   align-items: center;
 }
 
-#game-message,
+#game-message {
+  color: #fdfeffe6;
+  /* background: #10054abf; */
+  padding: 10px;
+  margin-top: 15px;
+  display: inline-block;
+}
+
 #history-div {
-  color: white;
-  background: #0000009c;
-  padding: 5px;
-  font-size: 17px;
+  margin-top: 15px;
+  padding: 10px;
+  color: #fdfeffe6;
 }
 
 button {
@@ -165,12 +169,14 @@ button {
 
 .player-section {
   grid-area: player-section;
-  grid-template-areas: "player-title""player"
+  grid-template-areas: "player-title""player";
+  background: #4c628ead;
 }
 
 .opponent-section {
   grid-area: opponent-section;
-  grid-template-areas: "opponent-title""opponent"
+  grid-template-areas: "opponent-title""opponent";
+  background: #a53f3f91;
 }
 
 .player-title {
@@ -185,33 +191,36 @@ button {
   grid-area: player;
   float: left;
   position: relative;
-  background: #4c628ead;
   padding: 5px 0px;
-}
-
-.stats-div {
-  grid-area: stats;
-  grid-template-areas: "attackBtn""game-stats";
-  align-self: center;
-  padding: 10px;
-  background: #2c2f2dcc;
-  border: solid black 2px;
 }
 
 #opponent {
   grid-area: opponent;
   justify-self: right;
   position: relative;
-  background: #a53f3f91;
   padding: 5px 0px;
 }
 
-#attack-butotn {
+.stats-div {
+  grid-area: stats;
+  display: grid;
+  grid-template-rows: 1fr 3fr;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-areas: 
+  ". attackBtn ."
+  "game-stats game-stats game-stats";
+  align-self: center;
+}
+
+#attack-button {
   grid-area: attackBtn;
 }
 
 #game-stats {
   grid-area: game-stats;
+  align-self: center;
+  background-color: #000000bf;
+  padding: 10px;
 }
 
 h3 {
@@ -220,7 +229,7 @@ h3 {
 
 footer {
   grid-area: footer;
-  background: #0000009c;
+  background: #330303b3;
   padding: 10px;
 }
 
@@ -233,7 +242,7 @@ span {
 
 a {
   text-decoration: underline;
-  color: #fff;
+  color: #fdfeffe6
 }
 
 @media (max-width: 960px) {
@@ -245,5 +254,15 @@ a {
       "header header header"
       "main main main"
       "footer footer footer";
+  }
+}
+
+@media (max-width: 600px) {
+  #battle-ground {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "player-section opponent-section"
+      "stats stats";
   }
 }

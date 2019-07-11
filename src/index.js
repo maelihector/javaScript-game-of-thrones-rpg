@@ -305,15 +305,10 @@ function gameStats() {
                   Opponent attacked you back with
                   Attack Power of: ${currentOpponentCounterAttackPower}
     `;
-    // p.innerText = `Last Attack Power: ${updatedPlayerAttackPower}
-    // New Attack Power: ${updatedPlayerAttackPower + playerStartingAttackPower}
-    // Opponent's Attack Power: ${currentOpponentCounterAttackPower}
-    // Opponent Health Points: ${updatedOpponentHealthPoints}
-    // Your Health Points: ${updatedPlayerHealthPoints}
-    // `;
   }
   // append message to gameStatsDiv
   gameStatsDiv.appendChild(p);
+  gameMessage();
 }
 
 // called when an opponent has > 0 healthPoints from gameStats()
@@ -400,23 +395,26 @@ function gameOver(string) {
 function gameMessage() {
   // empty gameMessageDiv
   gameMessageDiv.innerText = "";
+  gameMessageDiv.setAttribute('style', 'background:#10054abf;');
   // if user has not chosen their player role,
   if (!player) {
-    // message is following:
     let pickPlayerMessage = 'Choose Your Player';
     gameMessageDiv.append(pickPlayerMessage);
+    // if player is still alive and has not defeated current opponent
+  } else if (opponent && updatedPlayerHealthPoints > 0) {
+    gameMessageDiv.append('Attack Your Opponent!');
+    gameMessageDiv.setAttribute('style', 'background:#330303b3;');
+    // if player has no points left
+  } else if (updatedPlayerHealthPoints <= 0) {
+    gameMessageDiv.append('Game Over');
+    gameMessageDiv.setAttribute('style', 'background:#330303b3;');
     // if player has yet to choose an opponent & there are still enemies left
   } else if (!opponent && enemies.length > 0) {
-    // message is following:
     let pickOpponentMesage = 'Choose Your Opponent';
     gameMessageDiv.append(pickOpponentMesage);
-    // else if there is an opponent & player has not been defeated
-  } else if (opponent && updatedPlayerHealthPoints > 0) {
-    // message is following:
-    gameMessageDiv.append('Attack Your Opponent!');
   } else {
-    // else message is following:
-    gameMessageDiv.append('Game Over');
+    let playerWinsMessage = "You are the Supreme Ruler of the Seven Kingdoms!"
+    gameMessageDiv.append(playerWinsMessage);
   }
 }
 
@@ -461,6 +459,7 @@ function displayMoreInfo() {
 
 // showHistory() function shows player role history. 
 function showHistory(value) {
+  historyDiv.setAttribute('style', 'background-color: #000000bf;');
   // empty historyDiv to avoid more than one role history showing at once
   historyDiv.innerText = "";
   // loop through all keys in roles object
