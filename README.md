@@ -19,16 +19,16 @@ The game ends when either the player is defeated, when player and opponent defea
 - JavaScript is in place to alter the counter attack power of some roles in order to add difficulty to the game.
 
 ## Technologies Used
-HTML
-Vanilla CSS
-JavaScript
-[jQuery](https://jquery.com/)
+### HTML
+### Vanilla CSS
+### JavaScript
+### [jQuery](https://jquery.com/)
 
 
 ## Credits
-[Meyerweb](http://meyerweb.com/eric/tools/css/reset/) CSS reset 
-[Google Fonts](https://fonts.google.com/specimen/UnifrakturMaguntia)
-[Pixaby](https://fonts.google.com/specimen/UnifrakturMaguntia) images
+#### [Meyerweb](http://meyerweb.com/eric/tools/css/reset/) CSS reset 
+#### [Google Fonts](https://fonts.google.com/specimen/UnifrakturMaguntia)
+#### [Pixaby](https://fonts.google.com/specimen/UnifrakturMaguntia) images
 
 > Written with [StackEdit](https://stackedit.io/).
 
