@@ -1,4 +1,4 @@
-// create roles object
+// Create roles object
 const roles = {
   "House Targaryen": {
     name: "House Targaryen",
@@ -75,29 +75,22 @@ const roles = {
 
 // ** Global Variables **
 
-// grab reference to div with id='all-roles' to remove after user chooses their player.
-let allRolesdDiv = document.getElementById('all-roles');
-// grab reference to area where we want role history to be rendered and save to historyDiv variable
-let historyDiv = document.getElementById('history-div');
-// grab reference to area where opponent is rendered
-let opponentDiv = document.getElementById('opponent');
-// grab reference to area where enemies are rendered
-let undefeatedCardsDiv = document.getElementById('undefeated');
-// grab reference to the area where we want game messages to be rendered and save to gameMessageDiv variable  
-let gameMessageDiv = document.getElementById('game-message');
-// grab reference to attack-button div.
-let attackBtnDiv = document.getElementById('attack-button');
-// grab reference to game-stats div.
-let gameStatsDiv = document.getElementById('game-stats');
-// declare player var to be used in pickRole()
+// Grab reference to DOM game divs
+const allRolesdDiv = document.getElementById('all-roles');
+const historyDiv = document.getElementById('history-div');
+const opponentDiv = document.getElementById('opponent');
+const undefeatedCardsDiv = document.getElementById('undefeated');
+const gameMessageDiv = document.getElementById('game-message');
+const attackBtnDiv = document.getElementById('attack-button');
+const gameStatsDiv = document.getElementById('game-stats');
+
+// Declare game variables
 let player;
-// save all roles besides player as initial list of enemies
 let enemies = [];
-// declare opponent var to be used in pickOpponent()
 let opponent;
-// numAttacks variable helps keep track of player attack power
-let numAttacks = 0;
-// these declared vars are used for game stats
+
+// Variables to track of, and update scores
+let numAttacks = 0; 
 let playerStartingAttackPower;
 let playerStartingHealthPoints;
 let updatedPlayerAttackPower;
@@ -105,221 +98,202 @@ let updatedPlayerHealthPoints;
 let opponentStartingHealthPoints;
 let updatedOpponentHealthPoints;
 let currentOpponentCounterAttackPower;
-let lastOpponent;
 let lastNumAttacks;
+let lastOpponent;
 
-// Function to render role cards to the DOM.
-// Add role and area parameters to re-render cards throughout the game
+// Function that renders specific role cards to specific game areas on the DOM
 function renderRoleCards(role, area) {
-  // create a div and save to cardDiv variable
-  let cardDiv = document.createElement('div');
-  // add the following attributes to cardDiv
+  // Create a <div> element, and set attributes
+  const cardDiv = document.createElement('div');
   setAttributes(cardDiv, {
     'class': 'card',
-    // give id the value of role name
     'id': role.name,
   });
-  // only if area is 'all-roles', add attribute mouseover so player can see role history before choosing a player role.
+  // If area is "all-roles", role card should allow for the player to choose it as a role
   if (area === 'all-roles') {
     setAttributes(cardDiv, {
-      // add 'this' as an argument of showHistory() to grab reference to the target of the mousedover event
       'onmouseover': 'showHistory(this)',
-      // add attribute onclick event so user can choose their player by calling pickRole() function
-      // add 'this' as an argument of pickRoles() to grab reference to the target of the click event
       'onclick': 'pickRole(this)'
     });
   }
-  // if area is 'undefeated'
+  // If area is "undefeated", role card should allow for the player to choose it as an opponent
   if (area === 'undefeated') {
-    // grab reference to enemies and battleground div
-    let enemiesDiv = document.getElementById('enemies');
-    let battlegroundDiv = document.getElementById('battle-ground');
+    const enemiesDiv = document.getElementById('enemies');
+    const battlegroundDiv = document.getElementById('battle-ground');
     // change attribute style display from none to grid
     enemiesDiv.setAttribute('style', 'display:grid');
     battlegroundDiv.setAttribute('style', 'display:grid');
     // if there is no opponent & player is undefeated,
     if (!opponent && roles[player]._healthPoints > 0) {
-      // add attributes onclick() so user can choose their opponent by calling pickOpponent() function
       setAttributes(cardDiv, {
-        // add 'this' as an argument of pickRoles() to grab reference to the target of the click event
         'onclick': 'pickOpponent(this)',
-        // add curser:pointer 
         'class': 'pointer'
       });
     }
   }
-  // create an h3 element and save to h3 variable
-  let h3 = document.createElement('h3');
-  // insert role name in h3
+  // Create an <h3> element for role name
+  const h3 = document.createElement('h3');
   h3.innerText = role.name;
-  // create an img element and save to img variable
-  let img = document.createElement('img');
-  // add the following attributes to img
+
+  // Create <img> element with appropriate attributes
+  const img = document.createElement('img');
   setAttributes(img, {
-    // for correct image diplayed
     'src': role.imageUrl,
-    // for screen readers
     'alt': role.name + ' Coat of Arms',
   });
-  // create an h4 element and save to h4 variable
-  let h4 = document.createElement('h4');
-  // insert role healthPoints in h4
+
+  // Create an <h4> element for role health points
+  const h4 = document.createElement('h4');
   h4.innerText = 'Health Points: ' + role._healthPoints;
-  // build role card appropriately by appending h3, img, and h4 in proper order
+
+  // Build role card
   cardDiv.append(h3, img, h4);
-  // grab reference to the area where we want the role card to be rendered and save to area variable
-  let htmlArea = document.getElementById(area);
-  // append role card to area.
+
+  // Grab reference to appropriate DOM area and append the role card
+  const htmlArea = document.getElementById(area);
   htmlArea.prepend(cardDiv);
 }
 
-// function to start game by rendering all roles to DOM so user can choose their player.
+// Function that starts game by rendering all roles to DOM so user can choose a player
 function startGame() {
-  // loop through all roles 
+  // Loop through all roles in roles object
   for (let key in roles) {
-    // render each role to DOM to div with id='all-roles'
+    // Call `renderRoleCards` function for each role
     renderRoleCards(roles[key], 'all-roles');
   }
   // call gameMessage() to display to player 'Choose Your Player'
   gameMessage();
 }
+
 // Call startGame() to initiate game.
 startGame();
 
-// function to pick player role
+// Function that picks player role
 function pickRole(value) {
-  // empty historyDiv as role history will only be show while choosing a player
+  // Remove historyDiv and unchosen roles
   historyDiv.remove();
-  // remove all-roles div as list of enemies will appear elsewhere
   allRolesdDiv.remove();
-  // assign clicked value.id to player
+
+  // Assign clicked value.id to player
   player = value.id;
-  // loop through all roles
+
+  // Loop through all roles
   for (let key in roles) {
-    // if  a role name matches the value.id 
+    // Render the matching role to the DOM
     if (roles[key].name === value.id) {
-      // render the card in player div
       renderRoleCards(roles[key], 'player');
     } else {
-      // else push roles to enemies array
+      // Else push roles to enemies array and render them to their own area on the DOM
       enemies.push(roles[key].name);
-      // and render role cards to undefeated section
       renderRoleCards(roles[key], 'undefeated');
     }
   }
-  // // call gameMessage() to display 'choose Your Opponent'
   gameMessage();
-  // // call gameStats() to display 'Stats' title  
   gameStats();
-  // save values for globals to use in game stats
+
+  // Update values for globals to use in game stats
   playerStartingAttackPower = roles[player]._attackPower;
   playerStartingHealthPoints = roles[player]._healthPoints;
   updatedPlayerAttackPower = roles[player]._attackPower;
   updatedPlayerHealthPoints = roles[player]._healthPoints;
 }
 
-// function to choose an opponent throughout game
+// Function to choose an opponent throughout game
 function pickOpponent(value) {
-  // if event goes off when global opponent is falsey it means that there is no opponent
+  // If event goes off when global opponent is falsey it means that there is no opponent
   if (!opponent) {
-    // first empty opponent div
+    // Empty opponent div and set new opponent value
     opponentDiv.innerHTML = "";
-    // give opponent value of value.id
     opponent = value.id;
-    // find index of opponent in enemies array
+    // Find opponent in enemies array and remove them from it
     let opponentIndex = enemies.indexOf(opponent);
-    // remove opponent from enemies array
     enemies.splice(opponentIndex, 1);
-    // empty undefeated cards to re-render updated enemies array
+    // Empty undefeated cards and then re-render updated enemies array
     undefeatedCardsDiv.innerHTML = "";
-    // re-render undefeated enemies cards
     for (let i = 0; i < enemies.length; i++) {
       renderRoleCards(roles[enemies[i]], 'undefeated');
     }
-    // render the chosen opponent card to opponent section on DOM
+    // Render the chosen opponent card to opponent section on the DOM
     renderRoleCards(roles[opponent], 'opponent');
   }
-  // call gameMessage to show 'Attack Opponent'
   gameMessage();
-  // call createAttackButton()
   createAttackButton();
-  // save values for globals to use in game stats
+
+  // Update values for globals to use in game stats
   opponentStartingHealthPoints = roles[opponent]._healthPoints;
   updatedOpponentHealthPoints = roles[opponent]._healthPoints;
   currentOpponentCounterAttackPower = roles[opponent].counterAttackPower;
   lastOpponent = opponent;
   lastNumAttacks = numAttacks;
-  // call gameStats to replace 'End of Battle' stats with 'No stats yet'
   gameStats();
 }
 
-// changeScore() function will update player's score after every attack button click
+// Function that updates player's score after every attack
 function changeScore() {
-  // increase numAttacks to give player more attack power at next attack
+  // Increase number of attacks, then increase player's attack power by number of attacks to update player attack power for next attack
   numAttacks++;
-  // increase player's attackPower by numAttacks and update playerAttackPower for next attack
   updatedPlayerAttackPower = playerStartingAttackPower * numAttacks;
-  // re-value opponentHealthPoints by decreasing by player's attackPower
+  // Decrease opponent's health points by decreasing it by player's attack power
   updatedOpponentHealthPoints -= updatedPlayerAttackPower;
-  // call opponent object healthPoints setter and give argument of updated opponentHealthPoints
+  // Call opponent object healthPoints setter and give argument of updated opponent healthpoints
   roles[opponent].healthPoints = updatedOpponentHealthPoints;
-  // Opponent Counter Attack Power changes for a more chanllenging game
-  // if Baratheon defending against Stark, increase Baratheon counterAttackPower
+
+  // Opponent counter attack powers that change for a more chanllenging game:
+  // If Baratheon defending against Stark, increase Baratheon counter attack power
   if (player === roles["House Stark"].name && opponent === roles["House Baratheon"].name) {
     currentOpponentCounterAttackPower = 10;
   }
-  // if Targaryen defending against Baratheon, lower Targaryen counterAttackPower
+  // if Targaryen defending against Baratheon, lower Targaryen counter attack power
   if (player === roles["House Baratheon"].name && opponent === roles["House Targaryen"].name) {
     currentOpponentCounterAttackPower = 4;
   }
-  // decrease player's healthPoints by opponent's counterAttackPower
+
+  // Decrease player's health points by opponent's counter attack power
   updatedPlayerHealthPoints -= currentOpponentCounterAttackPower;
-  // call player object healthPoints setter and give argument of new playerHealthPoints
+  // Call player object healthPoints setter and give argument of new player health points
   roles[player].healthPoints = updatedPlayerHealthPoints;
-  // call showHPsChangeOnCards for player
+  // Show updated health points on role cards
   showHPsChangeOnCards();
-  // show player stats change
+
   gameStats();
 }
 
-// function to show player stats changes
+// Function that updates player stats
 function gameStats() {
-  // first empty gameStatsDiv
+  // Empty gameStatsDiv
   gameStatsDiv.innerHTML = '';
-  // create p element
-  let p = document.createElement('p');
-  // if 0 numAttack OR player has not attacked new opponent
+  // Create <p> element
+  const p = document.createElement('p');
+  // If 0 numAttack OR player has not attacked new opponent
   if (numAttacks === 0 || opponentStartingHealthPoints === updatedOpponentHealthPoints) {
     p.innerText = 'Stats: No Attacks Yet';
-    // if opponent HealthPoints are less than or equal to 0, opponent defeated
+    // If opponent health points are less than or equal to 0, opponent has been defeated
   } else if (updatedOpponentHealthPoints <= 0) {
-    // call opponentExtinction
     opponentExtinction();
+    // If player health points are less than or equal to 0, player has been defeated
   } else if (updatedPlayerHealthPoints <= 0) {
-    // call gameOver with 'loser' as string
     gameOver('loser');
+    // Else battle is in progress
   } else {
-    // create during battle stata message
     p.innerText = `You attacked with 
                   Attack Power of: ${updatedPlayerAttackPower}
                   Opponent attacked you back with
                   Attack Power of: ${currentOpponentCounterAttackPower}
     `;
   }
-  // append message to gameStatsDiv
   gameStatsDiv.appendChild(p);
   gameMessage();
 }
 
-// called when an opponent has > 0 healthPoints from gameStats()
+// Function that updates opponent status
 function opponentExtinction() {
-  // first empty gameStatsDiv
+  // Empty gameStatsDiv
   gameStatsDiv.innerHTML = '';
-  // create p element
-  let p = document.createElement('p');
-  // make sure that numAttack per battle is a positive # (is negative at first call)
+  // Create <p> element
+  const p = document.createElement('p');
+  // Make sure that numAttack per battle is a positive # (is negative at first call)
   let numAttacksInBattle = Math.abs(lastNumAttacks - numAttacks)
-  // show battle end stats
+  // Show battle end stats
   p.innerText = `End of Battle Stats:
     
     Total Number of Attacks: 
@@ -333,170 +307,161 @@ function opponentExtinction() {
     ${lastOpponent} Reduced Your Health Points By: 
     ${numAttacksInBattle * currentOpponentCounterAttackPower}
     `;
-  // append message to gameStatsDiv
+
   gameStatsDiv.appendChild(p);
-  // remove attack button to prevent bugs
+  // Remove attack button
   attackBtnDiv.innerHTML = '';
-  // push defeated role card to defeated area with all other defeated enemies
+  // Place defeated role card to defeated area on the DOM
   renderRoleCards(roles[opponent], 'defeated');
-  // empty opponent div
+  // Empty opponent div
   opponentDiv.innerHTML = '';
-  // then empty opponent variable
+  // Empty opponent variable
   opponent = '';
-  // empty undefeated cards div,
+  // Empty undefeated cards div, and re-render with `pickOpponent` onClick
   undefeatedCardsDiv.innerHTML = '';
-  // and re-render undefeated cards with pickOpponent onClick
   for (let i = 0; i < enemies.length; i++) {
     renderRoleCards(roles[enemies[i]], 'undefeated');
   }
-  // get # of defeated enemies to check if game is over or is continuing
-  // find 'defeated' element on the DOM
-  let defeatedEnemies = document.getElementById('defeated');
-  // count element children in defeated section
+  // Get # of defeated enemies to check if game is over or is continuing
+  const defeatedEnemies = document.getElementById('defeated');
   let numberDefeatedEnemies = defeatedEnemies.children.length;
-  // if all four enemies have are there player has won the game
+  // If all four enemies are defeated, player has won the game
   if (numberDefeatedEnemies === 4) {
     gameOver('winner');
   }
-  // check if player is still alive after last defeat, if so they lost at their last battle
+  // If player's health points are depleted, gameOver()
   if (updatedPlayerHealthPoints <= 0) {
     gameOver('depleted');
   }
-  // call gameMessage() to show appropriate message of Game Over or Pick Opponent
   gameMessage();
 }
 
-// function that delivers end of game message
+// Function that delivers end of game message
 function gameOver(string) {
-  // remove attack button to prevent bugs
+  // Empty attack button div
   attackBtnDiv.innerHTML = '';
-  // empty information div
+  // Empty information div
   gameStatsDiv.innerHTML = '';
-  // create p element
-  let p = document.createElement('p');
-  // declare variable to hold appropriate message
+  // Create p element
+  const p = document.createElement('p');
+  // Declare variable to hold appropriate message
   let messageText;
-  // if player health points are > 0
+  // Ff player health points are > 0
   if (string === 'winner') {
     messageText = "Congratulations, You defeated all of your opponents and are now sitting pretty on the Iron Throne! You attacked a total of " + numAttacks + " times, ended with an attack power of " + updatedPlayerAttackPower + ", and lost " + (playerStartingHealthPoints - updatedPlayerHealthPoints) + " health points. Refresh the page to try again, but next time challange yourself by attempting to beat the game with less total attacks and/or by keeping more of your health points. Good Luck!";
   }
-  // if opponent health points > 0
+  // If opponent health points > 0
   if (string === 'loser') {
     messageText = "You were defeated by " + lastOpponent + "! Before your untimely defeat you attacked a total of " + numAttacks + " times, and ended with an attack power of " + updatedPlayerAttackPower + ". Refresh the page and try again, but pick the order of your opponents differently next time. Good Luck!";
   }
-  // if both player and opponent have < 0 health points
+  // If both player and opponent have < 0 health points
   if (string === 'depleted') {
     messageText = lastOpponent + " decided that they weren't going quietly into the night but rather take you down with them, so it looks like neither of your houses will be sitting on the Iron Throne. Before your untimely defeat you attacked a total of " + numAttacks + " times, and ended with an attack power of " + updatedPlayerAttackPower + ". Refresh the page to try again, but next time get more experience (total number of attacks) before taking on " + lastOpponent + ". Good Luck!";
   }
   gameStatsDiv.append(messageText, p);
 }
 
-// Function to decide which game message should be displayed throughout the game
+// Function that chooses the game message that is displayed throughout the game
 function gameMessage() {
-  // empty gameMessageDiv
+  // Empty gameMessageDiv
   gameMessageDiv.innerText = "";
   gameMessageDiv.setAttribute('style', 'background:#10054abf;');
-  // if user has not chosen their player role,
+  // If user has not chosen their player role,
   if (!player) {
     let pickPlayerMessage = 'Choose Your Player';
     gameMessageDiv.append(pickPlayerMessage);
-    // if player is still alive and has not defeated current opponent
+    // If player is still alive and has not defeated current opponent
   } else if (opponent && updatedPlayerHealthPoints > 0) {
     gameMessageDiv.append('Attack Your Opponent!');
     gameMessageDiv.setAttribute('style', 'background:#330303b3;');
-    // if player has no points left
+    // If player has no points left
   } else if (updatedPlayerHealthPoints <= 0) {
     gameMessageDiv.append('Game Over');
     gameMessageDiv.setAttribute('style', 'background:#330303b3;');
-    // if player has yet to choose an opponent & there are still enemies left
+    // If player has yet to choose an opponent & there are still enemies left
   } else if (!opponent && enemies.length > 0) {
     let pickOpponentMesage = 'Choose Your Opponent';
     gameMessageDiv.append(pickOpponentMesage);
+    // Else player has won
   } else {
     let playerWinsMessage = "You are the Supreme Ruler of the Seven Kingdoms!"
     gameMessageDiv.append(playerWinsMessage);
   }
 }
 
-// function to create attack button
+// Function that creates the attack button and appends it the the DOM
 function createAttackButton() {
-  // create button element
-  let attackBtn = document.createElement('button');
+  // Create button element
+  const attackBtn = document.createElement('button');
   attackBtn.innerText = 'Attack';
-  // give attack button onclick event
+  // Give attack button onclick event
   setAttributes(attackBtnDiv, {
-    'onclick': 'changeScore()'
+    'onclick': 'changeScore()',
+    'class' : 'attackBtn attackBtnDiv',
   });
-  // append button element to attackBtn div
   attackBtnDiv.append(attackBtn);
 }
 
-// Change Health Points on player and opponent cards
+// Function that updates healthpoints on player and opponent cards
 function showHPsChangeOnCards() {
-  // grab player and opponent elements
-  let playerCard = document.getElementById(player);
-  let opponentCard = document.getElementById(opponent);
-  // last child of role card is where health points are located (see renderRoleCards())
+  // Grab player and opponent elements
+  const playerCard = document.getElementById(player);
+  const opponentCard = document.getElementById(opponent);
+  // Last child of role card is where health points are located
   let opponentH4 = opponentCard.lastChild;
   let playerH4 = playerCard.lastChild;
-  // update role's health points
+  // Update role's health points
   opponentH4.innerText = 'Health Points: ' + updatedOpponentHealthPoints;
   playerH4.innerText = 'Health Points: ' + updatedPlayerHealthPoints;
 
 }
 
-// function to toggle game objective information
-function toggleObjective() {
-  // call toggleElement to reduce code
-  toggleElement('game-objective', 'x', 'Open Objective', 'Close Objective');
-}
-
-// function for moreInfo display
-function displayMoreInfo() {
-  // call toggleElement to reduce code
-  toggleElement('moreInfo', 'info', 'More Info', 'Less Info');
-}
-
-// showHistory() function shows player role history. 
+// Function that shows player history before player chooses a role
 function showHistory(value) {
   historyDiv.setAttribute('style', 'background-color: #000000bf;');
-  // empty historyDiv to avoid more than one role history showing at once
+  // Empty historyDiv to avoid more than one role history showing at once
   historyDiv.innerText = "";
-  // loop through all keys in roles object
+  // Loop through all keys in roles object to get and display appropriate role history
   for (let key in roles) {
-    // if the value of the id is equal to role name,
     if (value.id === roles[key].name) {
-      // insert role history in historyDiv
       historyDiv.innerText = roles[key].history;
     }
   }
 }
 
-// function that toggles elements between open and close.
+// Function that toggles game objective information
+function toggleObjective() {
+  toggleElement('game-objective', 'x', 'Open', 'Close');
+}
+
+// Function that toggles webpage information
+function displayMoreInfo() {
+  toggleElement('moreInfo', 'info', 'More Info', 'Less Info');
+}
+
+// ** HELPER FUNCTIONS **
+
+// Function that toggles elements between open and close.
 function toggleElement(elementToToggle, eventElement, stringWhenClosed, stringWhenOpened) {
-  // grab element that needs to be toggled from DOM and save to toggledElement var
-  let toggledElement = document.getElementById(elementToToggle);
-  // grab the element that will trigger the open and closing of the toggledElement and save to triggerElement var
-  let triggerElement = document.getElementById(eventElement);
-  // empty text inside triggerElement
+  // Grab element to toggle
+  const toggledElement = document.getElementById(elementToToggle);
+  // Grab element that triggers each toggle
+  const triggerElement = document.getElementById(eventElement);
+  // Empty text inside trigger element
   triggerElement.innerText = '';
-  // grab value of toggledElement's style attribute and save it to currentDisplay
+  // Grab display style of element to toggle
   let currentDisplay = toggledElement.getAttribute('style');
-  // if style is display:none -- (**** Note **** Add to in-line style to HTML and not CSS or first click will not trigger event)
+  // If display is 'none', set display to 'block', else set to display 'none'
   if (currentDisplay === 'display:none') {
-    // set attribute to display:block
     toggledElement.setAttribute('style', 'display:block');
-    // change innerText that signals click to close
     triggerElement.innerText = stringWhenOpened;
   } else {
-    // else set attribute to display:none
     toggledElement.setAttribute('style', 'display:none');
-    // change innerText that signals click to open
     triggerElement.innerText = stringWhenClosed;
   }
 }
 
-// Function to add several attributes to an element rather than adding one attribute at a time (see toggleObjective()).
+// Function to add several attributes to an element rather than adding one attribute at a time
 function setAttributes(el, attrs) {
   for (let key in attrs) {
     el.setAttribute(key, attrs[key]);
