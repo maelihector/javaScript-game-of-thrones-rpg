@@ -104,10 +104,10 @@ let lastOpponent;
 // Function that renders specific role cards to specific game areas on the DOM
 function renderRoleCards(role, area) {
   // Create a <div> element, and set attributes
-  const cardDiv = document.createElement('div');
+  let cardDiv = document.createElement('div');
   setAttributes(cardDiv, {
     'class': 'card',
-    'id': role.name,
+    'id': role.name
   });
   // If area is "all-roles", role card should allow for the player to choose it as a role
   if (area === 'all-roles') {
@@ -132,18 +132,18 @@ function renderRoleCards(role, area) {
     }
   }
   // Create an <h3> element for role name
-  const h3 = document.createElement('h3');
+  let h3 = document.createElement('h3');
   h3.innerText = role.name;
 
   // Create <img> element with appropriate attributes
-  const img = document.createElement('img');
+  let img = document.createElement('img');
   setAttributes(img, {
     'src': role.imageUrl,
-    'alt': role.name + ' Coat of Arms',
+    'alt': role.name + ' Coat of Arms'
   });
 
   // Create an <h4> element for role health points
-  const h4 = document.createElement('h4');
+  let h4 = document.createElement('h4');
   h4.innerText = 'Health Points: ' + role._healthPoints;
 
   // Build role card
@@ -158,8 +158,10 @@ function renderRoleCards(role, area) {
 function startGame() {
   // Loop through all roles in roles object
   for (let key in roles) {
-    // Call `renderRoleCards` function for each role
-    renderRoleCards(roles[key], 'all-roles');
+    if(roles.hasOwnProperty(key)){
+      // Call `renderRoleCards` function for each role
+      renderRoleCards(roles[key], 'all-roles');
+    }
   }
   // call gameMessage() to display to player 'Choose Your Player'
   gameMessage();
@@ -263,7 +265,7 @@ function gameStats() {
   // Empty gameStatsDiv
   gameStatsDiv.innerHTML = '';
   // Create <p> element
-  const p = document.createElement('p');
+  let p = document.createElement('p');
   // If 0 numAttack OR player has not attacked new opponent
   if (numAttacks === 0 || opponentStartingHealthPoints === updatedOpponentHealthPoints) {
     p.innerText = 'Stats: No Attacks Yet';
@@ -290,9 +292,9 @@ function opponentExtinction() {
   // Empty gameStatsDiv
   gameStatsDiv.innerHTML = '';
   // Create <p> element
-  const p = document.createElement('p');
+  let p = document.createElement('p');
   // Make sure that numAttack per battle is a positive # (is negative at first call)
-  let numAttacksInBattle = Math.abs(lastNumAttacks - numAttacks)
+  let numAttacksInBattle = Math.abs(lastNumAttacks - numAttacks);
   // Show battle end stats
   p.innerText = `End of Battle Stats:
     
@@ -343,7 +345,7 @@ function gameOver(string) {
   // Empty information div
   gameStatsDiv.innerHTML = '';
   // Create p element
-  const p = document.createElement('p');
+  let p = document.createElement('p');
   // Declare variable to hold appropriate message
   let messageText;
   // Ff player health points are > 0
@@ -384,7 +386,7 @@ function gameMessage() {
     gameMessageDiv.append(pickOpponentMesage);
     // Else player has won
   } else {
-    let playerWinsMessage = "You are the Supreme Ruler of the Seven Kingdoms!"
+    let playerWinsMessage = "You are the Supreme Ruler of the Seven Kingdoms!";
     gameMessageDiv.append(playerWinsMessage);
   }
 }
@@ -392,12 +394,12 @@ function gameMessage() {
 // Function that creates the attack button and appends it the the DOM
 function createAttackButton() {
   // Create button element
-  const attackBtn = document.createElement('button');
+  let attackBtn = document.createElement('button');
   attackBtn.innerText = 'Attack';
   // Give attack button onclick event
   setAttributes(attackBtnDiv, {
     'onclick': 'changeScore()',
-    'class' : 'attackBtn attackBtnDiv',
+    'class' : 'attackBtn attackBtnDiv'
   });
   attackBtnDiv.append(attackBtn);
 }
@@ -405,8 +407,8 @@ function createAttackButton() {
 // Function that updates healthpoints on player and opponent cards
 function showHPsChangeOnCards() {
   // Grab player and opponent elements
-  const playerCard = document.getElementById(player);
-  const opponentCard = document.getElementById(opponent);
+  let playerCard = document.getElementById(player);
+  let opponentCard = document.getElementById(opponent);
   // Last child of role card is where health points are located
   let opponentH4 = opponentCard.lastChild;
   let playerH4 = playerCard.lastChild;
@@ -464,6 +466,8 @@ function toggleElement(elementToToggle, eventElement, stringWhenClosed, stringWh
 // Function to add several attributes to an element rather than adding one attribute at a time
 function setAttributes(el, attrs) {
   for (let key in attrs) {
-    el.setAttribute(key, attrs[key]);
+    if(attrs.hasOwnProperty(key)){
+      el.setAttribute(key, attrs[key]);
+    }
   }
 }
