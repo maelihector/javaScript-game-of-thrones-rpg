@@ -1,0 +1,30 @@
+{
+  "name": "game-of-thrones-rpg",
+  "version": "1.0.0",
+  "description": "A role playing game built using es6",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maelihector/javaScript-game-of-thrones-rpg.git"
+  },
+  "keywords": [
+    "rpg",
+    "game-of-thrones",
+    "javascript",
+    "es6"
+  ],
+  "author": "Maeli Hector",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maelihector/javaScript-game-of-thrones-rpg/issues"
+  },
+  "homepage": "https://github.com/maelihector/javaScript-game-of-thrones-rpg#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}
